@@ -1,19 +1,24 @@
-import React from "react";
-import { clientId } from "./env";
+import React, { useState } from "react";
 import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Login } from "./Login";
+import { Callback } from "./Callback";
+import { Auth, AuthContext } from "./AuthContext";
 
-const App: React.FC = () => {
+export const App: React.FC = () => {
+  const [auth, setAuth] = useState<Auth>({
+    isAuthenticated: false,
+    accessToken: undefined,
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <a
-          href={`https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=http://localhost:3000/callback`}
-        >
-          Login
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <AuthContext.Provider>
+          <Route path="/" element={<Login />}></Route>
+          <Route path="/callback" element={<Callback />}></Route>
+        </AuthContext.Provider>
+      </Routes>
+    </BrowserRouter>
   );
 };
-
-export default App;
